@@ -13,6 +13,9 @@ auth,
 ],
 locationController.addNewLocation);
 
+//Get all locations
+router.get('/', auth, locationController.getAllLocations);
+
 //Update location
 router.put('/:id',
 auth, 

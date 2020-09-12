@@ -10,6 +10,10 @@ const SaleSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Part'
   },
+  owneruserSale: {
+    type: Schema.Types.ObjectId,
+    ref: 'User'
+  },
   amountSale: {
     type: Number,
     required: true

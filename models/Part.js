@@ -10,20 +10,28 @@ const PartSchema = new Schema({
     type: String,
     unique: true
   },
-  princePart: {
+  pricePart: {
+    type: Number
+  },
+  realsalepricePart: {
     type: Number
   },
   statusPart: {
     type: String,
-    enum: [
+    enum: [                     
       'Buena',
       'Defectuosa',
       'Vendida'
-    ]
+    ],
+    default: 'Buena'
   },
   ownercarPart: {
     type: Schema.Types.ObjectId,
     ref: 'Car'
+  },
+  userCreate: {
+    type: Schema.Types.ObjectId,
+    ref: 'User'
   },
   createAt: {
     type: Date,

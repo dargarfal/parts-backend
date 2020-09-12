@@ -13,6 +13,9 @@ auth,
 ],
 brandConstroller.addNewBrand);
 
+//Get all brands
+router.get('/', auth, brandConstroller.getAllBrands);
+
 //Update brand
 router.put('/:id',
 auth, 

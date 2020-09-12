@@ -18,12 +18,12 @@ const CarSchema = new Schema({
     unique: true
   },
   dateplateCar: {
-    type: Date,
-    unique: true
+    type: Date
   },
   chasisCar: {
     type: String,
-    trim: true
+    trim: true,
+    unique: true
   },
   registerdayCar: {
     type: Date,
@@ -37,8 +37,9 @@ const CarSchema = new Schema({
   priceCar: {
     type: Number
   },
-  currentprinceCar: {
+  currentsaleCar: {
     type: Number,
+    default: 0
   },
   enabledCar: {
     type: Boolean,
@@ -56,6 +57,10 @@ const CarSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Part'
   }],
+  userCreate: {
+    type: Schema.Types.ObjectId,
+    ref: 'User'
+  },
   createAt: {
     type: Date,
     default: Date.now()
