@@ -12,7 +12,6 @@ const UserSchema = new Schema({
   userEmail: {
     type: String,
     trim: true,
-    unique: true
   },
   userPass: {
     type: String,
@@ -42,8 +41,8 @@ UserSchema.pre('save', async function(next){
   } catch (error) {
     console.log('Encripting error');
     next(error);
-  }
-
+  }const salts = await bcrypt.genSalt(10);
 })
+
 
 module.exports = mongoose.model('User', UserSchema);
