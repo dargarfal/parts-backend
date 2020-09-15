@@ -1,70 +1,74 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const CarSchema = new Schema({
   brandCar: {
     type: Schema.Types.ObjectId,
-    ref: 'Brand'
+    ref: "Brand",
   },
   modelCar: {
     type: String,
-    unique: true
+    unique: true,
   },
   yearCar: {
-    type: Number
+    type: Number,
   },
   plateCar: {
     type: String,
-    unique: true
+    unique: true,
   },
   dateplateCar: {
-    type: Date
+    type: Date,
   },
   chasisCar: {
     type: String,
     trim: true,
-    unique: true
+    unique: true,
   },
   registerdayCar: {
     type: Date,
     required: true,
-    default: Date.now()
+    default: Date.now(),
   },
   locationCar: {
     type: Schema.Types.ObjectId,
-    ref: 'Location'
+    ref: "Location",
   },
   priceCar: {
-    type: Number
+    type: Number,
   },
   currentsaleCar: {
     type: Number,
-    default: 0
+    default: 0,
   },
   enabledCar: {
     type: Boolean,
-    default: true
+    default: true,
   },
   finishedCar: {
     type: Boolean,
-    default: false
+    default: false,
   },
-  imagesCar: [{
-    type: Schema.Types.ObjectId,
-    ref: 'Image'
-  }],
-  partsCar: [{
-    type: Schema.Types.ObjectId,
-    ref: 'Part'
-  }],
+  imagesCar: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Image",
+    },
+  ],
+  partsCar: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Part",
+    },
+  ],
   userCreate: {
     type: Schema.Types.ObjectId,
-    ref: 'User'
+    ref: "User",
   },
   createAt: {
     type: Date,
-    default: Date.now()
-  }
+    default: Date.now(),
+  },
 });
 
-module.exports = mongoose.model('Car', CarSchema);
+module.exports = mongoose.model("Car", CarSchema);

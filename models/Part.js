@@ -1,42 +1,38 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const PartSchema = new Schema({
   namePart: {
     type: String,
-    required: true
+    required: true,
   },
   codePart: {
     type: String,
-    unique: true
+    unique: true,
   },
   pricePart: {
-    type: Number
+    type: Number,
   },
   realsalepricePart: {
-    type: Number
+    type: Number,
   },
   statusPart: {
     type: String,
-    enum: [                     
-      'Buena',
-      'Defectuosa',
-      'Vendida'
-    ],
-    default: 'Buena'
+    enum: ["Buena", "Defectuosa", "Vendida"],
+    default: "Buena",
   },
   ownercarPart: {
     type: Schema.Types.ObjectId,
-    ref: 'Car'
+    ref: "Car",
   },
   userCreate: {
     type: Schema.Types.ObjectId,
-    ref: 'User'
+    ref: "User",
   },
   createAt: {
     type: Date,
-    default: Date.now()
-  }
+    default: Date.now(),
+  },
 });
 
-module.exports = mongoose.model('Part', PartSchema);
+module.exports = mongoose.model("Part", PartSchema);

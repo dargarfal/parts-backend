@@ -1,13 +1,13 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const bcrypt = require('bcryptjs');
+const bcrypt = require("bcryptjs");
 
 const UserSchema = new Schema({
   userName: {
     type: String,
     required: true,
     trim: true,
-    unique: true
+    unique: true,
   },
   userEmail: {
     type: String,
@@ -16,33 +16,35 @@ const UserSchema = new Schema({
   userPass: {
     type: String,
     required: true,
-    trim: true
+    trim: true,
   },
   userRole: {
     type: String,
-    enum: [
-      'administrador',
-      'usuario'
-    ]
+    enum: ["administrador", "usuario"],
   },
+  userSales: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Sale",
+    },
+  ],
   createAt: {
     type: Date,
-    default: Date.now()
-  }
+    default: Date.now(),
+  },
 });
 
 //Executing the crypt before the method is executed save()
-UserSchema.pre('save', async function(next){
-
+UserSchema.pre("save", async function (next) {
   try {
     const salts = await bcrypt.genSalt(10);
     this.userPass = await bcrypt.hash(this.userPass, salts);
     next();
   } catch (error) {
-    console.log('Encripting error');
+    console.log("Encripting error");
     next(error);
-  }const salts = await bcrypt.genSalt(10);
-})
+  }
+  const salts = await bcrypt.genSalt(10);
+});
 
-
-module.exports = mongoose.model('User', UserSchema);
+module.exports = mongoose.model("User", UserSchema);
