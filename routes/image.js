@@ -6,7 +6,7 @@ const auth = require("../middleswares/auth");
 //api/images/:idcar - post - Upload image
 router.post("/:id", auth, imageController.uploadImage);
 
-//api/images - delete - Delele an image
+//api/images - delete - Delete an image
 router.delete("/:id", auth, imageController.deleteImage);
 
 //api/images/:idcar - get - Get all the images of a car

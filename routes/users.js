@@ -19,7 +19,7 @@ router.post(
   userController.newUser
 );
 
-router.get("/", isAdmin, userController.getAllUsers);
+router.get("/", auth, isAdmin, userController.getAllUsers);
 
 router.get("/:id", auth, userController.getOneUser);
 
@@ -29,13 +29,14 @@ router.put(
   "/:id",
   auth,
   [
-    check("userEmail", "Agrega un email válido").isEmail(),
     check(
       "userPass",
       "El password debe contener mínimo 6 caracteres"
-    ).isLength({ min: 6 }),
+    ).isLength({ min: 6 })
   ],
   userController.updateUser
 );
+
+router.put('/enable/:id', auth, isAdmin, userController.enableUser);
 
 module.exports = router;

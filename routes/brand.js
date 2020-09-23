@@ -19,7 +19,6 @@ router.get("/", auth, brandConstroller.getAllBrands);
 router.put(
   "/:id",
   auth,
-  [check("nameBrand", "El nombre de la marca es obligatorio").not().isEmpty()],
   brandConstroller.UpdateBrand
 );
 

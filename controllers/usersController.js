@@ -13,20 +13,19 @@ exports.newUser = async (req, res, next) => {
   const { userName } = req.body;
 
   const user = new User(req.body);
+  
 
   try {
     const checkUser = await User.findOne({ userName });
-
-    if (checkUser) {
-      return res
-        .status(400)
-        .json({ msg: "Este usuario ya se encuentra registrado" });
+    
+    if (checkUser !== null) {
+      return res.status(400).json({ msg: "Este usuario ya se encuentra registrado" });
     }
-
-    await user.save();
-    res.status(200).json({ msg: "Usuario creado correctamente" });
+    
+    const resp = await user.save();
+    res.status(200).json(resp);
   } catch (error) {
-    res.status(406).json(error);
+    res.status(400).json(error);
     next();
   }
 };
@@ -79,13 +78,15 @@ exports.getAllUsers = async (req, res, next) => {
   }
 };
 
-//api/users/:id - post - update user
+//api/users/:id - put - update user
 exports.updateUser = async (req, res, next) => {
+
   //Check errors
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(406).json({ errors: errors.array() });
-  }
+  }  
+  
 
   const userupdate = await User.findById(req.params.id);
 
@@ -95,6 +96,17 @@ exports.updateUser = async (req, res, next) => {
         userupdate.userEmail = req.body.userEmail;
       }
 
+      if (userupdate.userName !== req.body.userName) {
+        userupdate.userName = req.body.userName;
+      }
+
+      if (userupdate.userRole !== req.body.userRole) {
+        userupdate.userRole = req.body.userRole;
+      }
+
+      if (userupdate.fulluserName !== req.body.fulluserName) {
+        userupdate.fulluserName = req.body.fulluserName;
+      }
       if (req.body.userPass !== "") {
         const salts = await bcrypt.genSalt(10);
         userupdate.userPass = await bcrypt.hash(req.body.userPass, salts);
@@ -104,15 +116,45 @@ exports.updateUser = async (req, res, next) => {
         { _id: req.params.id },
         userupdate
       );
-      res.status(200).json({ msg: "Datos actualizados correctamente" });
+      console.log(userupdate);
+      res.status(200).json({ msg: "Usuario actualizado correctamente" });
     } else {
-      res
-        .status(400)
-        .json({
-          msg: "El usuario no tiene permisos para realizar esta acción",
-        });
+      res.status(400).json({
+        msg: "El usuario no tiene permisos para realizar esta acción",
+      });
     }
   } else {
     res.status(400).json({ msg: "El usuario no exite" });
   }
 };
+
+//Hacer ruta para habilitar y desabilitar Usuario
+exports.enableUser = async (req, res, next) => {
+
+  try {
+    const user = await User.findOne({_id: req.params.id});
+    
+    if(user){
+      if(user.userEnable){
+        user.userEnable = false;
+      }else{
+        user.userEnable = true;
+      }
+      
+      const newuser = await User.findByIdAndUpdate(
+        { _id: req.params.id },
+        user
+      );
+      res.status(200).json({ msg: 'Estado cambiado'});
+    }else{
+      res.status(400).json({ msg: 'El usuario no existe'});
+    }
+  } catch (error) {
+    res.status(400).json(error);
+    next();
+  }
+  
+  
+
+
+}

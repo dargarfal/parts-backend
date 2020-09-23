@@ -9,7 +9,7 @@ module.exports = function (req, res, next) {
     jwt.verify(token, process.env.SECRET_KEY, (error, decoded) => {
       if (error) return res.status(400).send({ msg: "No tienes acceso jwt" });
 
-      if (decoded.rol === "administrador") {
+      if (req.userRole === "administrador") {
         next();
       } else res.status(400).send({ msg: "Este usuario no tienes acceso" });
     });

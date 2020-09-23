@@ -16,4 +16,6 @@ router.post(
   loginController.loginUser
 );
 
+router.get('/', auth, loginController.obtenerUsuarioAutenticado);
+
 module.exports = router;

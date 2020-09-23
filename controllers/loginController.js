@@ -46,3 +46,15 @@ exports.loginUser = async (req, res, next) => {
     res.status(400).json({ msg: "El usuario no existe " });
   }
 };
+
+exports.obtenerUsuarioAutenticado =  async (req, res, next) => {
+  
+  let usuarioUp
+
+  try {
+    const usuario = await User.findById(req.userid).select('-userPass');
+    res.status(200).json(usuario);
+  } catch (error) {
+    res.status(400).send(error);
+  }
+}

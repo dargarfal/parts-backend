@@ -15,9 +15,15 @@ module.exports = function (req, res, next) {
       if (user === null)
         return res.status(400).send({ msg: "El usuario no exixte" });
 
-      req.userid = decoded.id;
+      if(user.userEnable){
+        req.userid = decoded.id;
       req.userRole = user.userRole;
       next();
+      }else{
+        return res.status(400).json({ msg: 'Usuario sin acceso' });
+      } 
+
+      
     });
   } else {
     return res.status(400).json({ msg: "Usuario no autenticado" });

@@ -9,9 +9,12 @@ const UserSchema = new Schema({
     trim: true,
     unique: true,
   },
-  userEmail: {
+  fulluserName: {
     type: String,
-    trim: true,
+    required: true
+  },
+  userEmail: {
+    type: String
   },
   userPass: {
     type: String,
@@ -28,6 +31,10 @@ const UserSchema = new Schema({
       ref: "Sale",
     },
   ],
+  userEnable: {
+    type: Boolean,
+    default: true
+  },
   createAt: {
     type: Date,
     default: Date.now(),
