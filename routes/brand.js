@@ -22,4 +22,6 @@ router.put(
   brandConstroller.UpdateBrand
 );
 
+router.get('/:id', auth, brandConstroller.getOneBrand);
+
 module.exports = router;

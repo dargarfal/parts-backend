@@ -7,8 +7,7 @@ const CarSchema = new Schema({
     ref: "Brand",
   },
   modelCar: {
-    type: String,
-    unique: true,
+    type: String
   },
   yearCar: {
     type: Number,
@@ -27,8 +26,7 @@ const CarSchema = new Schema({
   },
   registerdayCar: {
     type: Date,
-    required: true,
-    default: Date.now(),
+    required: true
   },
   locationCar: {
     type: Schema.Types.ObjectId,

@@ -20,8 +20,8 @@ exports.addNewLocation = async (req, res, next) => {
     if (test) {
       return res.status(400).json({ msg: "Esta ubicación ya existe" });
     } else {
-      await location.save();
-      res.status(200).json({ msg: "Nueva Ubicación creada" });
+      const reply = await location.save();
+      res.status(200).json(reply);
     }
   } catch (error) {
     res.status(400).json(error);
@@ -46,8 +46,11 @@ exports.updateLocation = async (req, res) => {
 
   try {
     if (test) {
-      await Location.findByIdAndUpdate({ _id: req.params.id }, req.body);
-      res.status(200).json({ msg: "Ubicación actualizada correctamente" });
+      const reply = await Location.findByIdAndUpdate(
+        { _id: req.params.id }, 
+        req.body, 
+        { new: true });
+      res.status(200).json(reply);
     } else {
       res.status(400).json({ msg: "La Ubicación no existe" });
     }

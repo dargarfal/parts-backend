@@ -15,28 +15,27 @@ exports.addNewCar = async (req, res, next) => {
   const testChasis = await Car.findOne({ chasisCar });
 
   req.body.userCreate = req.userid;
-
+  
   const newCar = new Car(req.body);
-
+  console.log(newCar);
   try {
     if (!testPlate) {
       if (!testChasis) {
-        newCar.save();
-        res.status(200).json({ msg: "Auto creado correctamente" });
+        const reply = await newCar.save();
+        res.status(200).json(reply);
       } else {
-        res.status(400).json({
+        return res.status(400).json({
           msg: "Ya existe un auto registrado con ese número de matricula",
         });
-        next();
       }
     } else {
-      res.status(400).json({
+      return res.status(400).json({
         msg: "Ya existe un auto registrado con ese número de matricula",
       });
-      next();
     }
   } catch (error) {
-    res.status(406).json(error);
+    res.status(400).json(error);
+    console.log(error);
     next();
   }
 };
@@ -44,7 +43,9 @@ exports.addNewCar = async (req, res, next) => {
 //api/cars - get - Get all cars
 exports.getAllCars = async (req, res, next) => {
   try {
-    const cars = await Car.find({}).populate("partsCar");
+    const cars = await Car.find({})
+    /*.populate("brandCar")
+    .populate("locationCar")*/;
     res.status(200).json(cars);
   } catch (error) {
     res.status(400).json(error);
@@ -55,9 +56,9 @@ exports.getAllCars = async (req, res, next) => {
 //api/cars/:id - get - Get a car
 exports.getCar = async (req, res, next) => {
   try {
-    const car = await Car.findOne({ _id: req.params.id }).populate("partsCar");
+    const car = await Car.findOne({ _id: req.params.id }).populate("partsCar").populate("brandCar");;
     if (car) {
-      res.status(200).json(car);
+      res.status(200).json(car)
     } else {
       res.status(400).json({ msg: "El auto no existe" });
     }

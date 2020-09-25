@@ -20,8 +20,8 @@ exports.addNewBrand = async (req, res, next) => {
     if (test) {
       return res.status(400).json({ msg: "La marca ya existe" });
     } else {
-      await brand.save();
-      res.status(200).json({ msg: "Marca creada correctamente" });
+      const newbrand = await brand.save();
+      res.status(200).json(newbrand);
     }
   } catch (error) {
     res.status(400).json(error);
@@ -56,8 +56,11 @@ exports.UpdateBrand = async (req, res, next) => {
       }
 
 
-      await Brand.findByIdAndUpdate({ _id: req.params.id }, test);
-      res.status(200).json({ msg: "Marca actualizada correctamente" });
+      const reply = await Brand.findByIdAndUpdate(
+        { _id: req.params.id }, 
+        test,
+        { new: true });
+      res.status(200).json(reply);
     } else {
       res.status(400).json({ msg: "La marca no existe" });
     }
@@ -90,5 +93,25 @@ exports.deleteBrand = async (req, res) => {
     next();
   }
 };
+
+
+//api/:id ----- get ---  Get an brand
+exports.getOneBrand = async (req, res, next) => {
+  
+  try {
+    const brand = await Brand.findOne({ _id: req.params.id });
+
+    if(brand){
+      res.status(200).json(brand);
+    }else{
+      res.status(400).json({ msg: 'La Marca no existe'});
+    }
+    
+  } catch (error) {
+    res.status(400).json(error);
+    next();
+  }
+}
+
 
  

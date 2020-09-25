@@ -28,12 +28,6 @@ router.delete("/:id", isAdmin, userController.deleteUser);
 router.put(
   "/:id",
   auth,
-  [
-    check(
-      "userPass",
-      "El password debe contener mínimo 6 caracteres"
-    ).isLength({ min: 6 })
-  ],
   userController.updateUser
 );
 

@@ -114,10 +114,11 @@ exports.updateUser = async (req, res, next) => {
 
       const updateuser = await User.findByIdAndUpdate(
         { _id: req.params.id },
-        userupdate
+        userupdate,
+        { new: true }
       );
-      console.log(userupdate);
-      res.status(200).json({ msg: "Usuario actualizado correctamente" });
+      
+      res.status(200).json(updateuser);
     } else {
       res.status(400).json({
         msg: "El usuario no tiene permisos para realizar esta acción",
@@ -143,9 +144,10 @@ exports.enableUser = async (req, res, next) => {
       
       const newuser = await User.findByIdAndUpdate(
         { _id: req.params.id },
-        user
+        user,
+        { new: true }
       );
-      res.status(200).json({ msg: 'Estado cambiado'});
+      res.status(200).json(newuser);
     }else{
       res.status(400).json({ msg: 'El usuario no existe'});
     }

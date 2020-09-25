@@ -11,7 +11,6 @@ exports.addNewPart = async (req, res, next) => {
   }
 
   const { ownercarPart } = req.body;
-  console.log(ownercarPart);
   const testOwnerCar = await Car.findOne({ _id: ownercarPart });
 
   req.body.userCreate = req.userid;
@@ -23,12 +22,12 @@ exports.addNewPart = async (req, res, next) => {
       const part = await newPart.save();
       testOwnerCar.partsCar.push(part._id);
       await Car.findByIdAndUpdate({ _id: testOwnerCar.id }, testOwnerCar);
-      res.status(200).json({ msg: "Parte y pieza agregada correctamente" });
+      res.status(200).json(part);
     } else {
       res.status(400).json({ msg: "El auto no exite" });
     }
   } catch (error) {
-    res.status(406).json(error);
+    res.status(400).json(error);
     next();
   }
 };
@@ -36,10 +35,11 @@ exports.addNewPart = async (req, res, next) => {
 //api/parts - get - Get all parts
 exports.getAllParts = async (req, res, next) => {
   try {
-    const parts = await Part.find({}).populate({
+    const parts = await Part.find({})/*.populate({
       path: "ownercarPart",
-      select: "brandCar modelCar yearCar",
-    });
+      select: "brandCar modelCar yearCar plateCar"
+    })*/;
+
     res.status(200).json(parts);
   } catch (error) {
     res.status(400).json(error);
@@ -74,8 +74,8 @@ exports.updatePart = async (req, res, next) => {
     const updatepart = await Part.findOne({ _id: req.params.id });
 
     if (updatepart) {
-      await Part.findByIdAndUpdate({ _id: updatepart._id }, req.body);
-      res.status(200).json({ msg: "Pieza actualizada correctamente" });
+      const newpart = await Part.findByIdAndUpdate({ _id: updatepart._id }, req.body, { new: true });
+      res.status(200).json(newpart);
     } else {
       res.status(400).json({ msg: "La pieza no existe" });
     }
@@ -91,13 +91,17 @@ exports.getPartsOfCar = async (req, res, next) => {
     const car = await Car.findOne({ _id: req.params.id });
 
     if (car) {
-      const parts = await Part.find({ ownercarPart: car._id });
+      const parts = await Part.find({ ownercarPart: car._id })/*.populate({
+        path: "ownercarPart",
+        select: "plateCar brandCar modelCar yearCar enabledCar finishedCar",
+      })*/;;
       res.status(200).json(parts);
     } else {
       res.status(400).json({ msg: "El auto no existe" });
     }
   } catch (error) {
     res.status(400).json(error);
+    console.log(error);
     next();
   }
 };
