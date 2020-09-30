@@ -71,7 +71,7 @@ exports.getOneUser = async (req, res, next) => {
 //api/users - get - get all users
 exports.getAllUsers = async (req, res, next) => {
   try {
-    const users = await User.find({});
+    const users = await User.find({}).select("-userPass");
     res.status(200).json(users);
   } catch (error) {
     res.status(406).json(error);
@@ -116,7 +116,7 @@ exports.updateUser = async (req, res, next) => {
         { _id: req.params.id },
         userupdate,
         { new: true }
-      );
+      ).select("-userPass");
       
       res.status(200).json(updateuser);
     } else {
@@ -146,7 +146,7 @@ exports.enableUser = async (req, res, next) => {
         { _id: req.params.id },
         user,
         { new: true }
-      );
+      ).select("-userPass");
       res.status(200).json(newuser);
     }else{
       res.status(400).json({ msg: 'El usuario no existe'});
@@ -160,3 +160,52 @@ exports.enableUser = async (req, res, next) => {
 
 
 }
+
+exports.changePassword = async (req, res, next) => {
+
+  //Check errors
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(406).json({ errors: errors.array() });
+  }
+
+  const { userPass, newuserPass } = req.body;
+
+  if(req.userid === req.params.id){
+    try {
+      const user = await User.findOne({ _id: req.params.id });
+  
+      if(user){
+  
+        const match = await bcrypt.compare(userPass, user.userPass);
+  
+        if(match){
+  
+          const salts = await bcrypt.genSalt(10);
+          user.userPass = await bcrypt.hash(newuserPass, salts);
+          
+          const newuser = await User.findByIdAndUpdate(
+            { _id: req.params.id },
+            user,
+            { new: true }
+          ).select("-userPass");
+          res.status(200).json(newuser);
+        }else{
+          res.status(400).json({ msg: "Contraseña actual incorrecta" });
+        }
+  
+      }else{
+        res.status(400).json({ msg: "El usuario no existe " });
+      }
+      
+    } catch (error) {
+      res.status(400).json(error);
+      next();
+    }
+  }else{
+    res.status(400).json({ msg: "Acceso denegado. usuario no propietario" });
+  }
+
+ 
+}
+ 

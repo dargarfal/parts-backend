@@ -56,9 +56,9 @@ exports.getAllCars = async (req, res, next) => {
 //api/cars/:id - get - Get a car
 exports.getCar = async (req, res, next) => {
   try {
-    const car = await Car.findOne({ _id: req.params.id }).populate("partsCar").populate("brandCar");;
+    const car = await Car.findOne({ _id: req.params.id }).populate("partsCar").populate("brandCar").populate("locationCar");;
     if (car) {
-      res.status(200).json(car)
+      res.status(200).json(car);
     } else {
       res.status(400).json({ msg: "El auto no existe" });
     }
@@ -74,8 +74,8 @@ exports.updateCar = async (req, res, next) => {
     const updatecar = await Car.findOne({ _id: req.params.id });
 
     if (updatecar) {
-      await Car.findByIdAndUpdate({ _id: updatecar._id }, req.body);
-      res.status(200).json({ msg: "Auto actualizado correctamente" });
+      const reply = await Car.findByIdAndUpdate({ _id: updatecar._id }, req.body, { new: true });
+      res.status(200).json(reply);
     } else {
       res.status(400).json({ msg: "El auto no existe" });
     }

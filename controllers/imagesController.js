@@ -56,12 +56,12 @@ exports.deleteImage = async (req, res, next) => {
       const car = await Car.findOne({ _id: image.ownercarImage });
       //console.log(car);
       const newlist = car.imagesCar.filter((imge) => imge != req.params.id);
-      console.log(newlist);
+     
       car.imagesCar = newlist;
       await Car.findByIdAndUpdate({ _id: car.id }, car);
-      await Image.findByIdAndDelete(image._id);
+      const reply = await Image.findByIdAndDelete(image._id);
       await cloudinary.v2.uploader.destroy(image.publicidImage);
-      res.status(200).json({ msg: "Imagen eliminada correctamente" });
+      res.status(200).json(reply);
     } else {
       res.status(400).json({ msg: "La imagen no existe" });
     }

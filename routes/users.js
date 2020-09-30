@@ -33,4 +33,12 @@ router.put(
 
 router.put('/enable/:id', auth, isAdmin, userController.enableUser);
 
+router.put('/changepass/:id', 
+auth,
+check(
+  "newuserPass",
+  "El password debe contener mínimo 6 caracteres"
+).isLength({ min: 6 }),
+userController.changePassword);
+
 module.exports = router;
