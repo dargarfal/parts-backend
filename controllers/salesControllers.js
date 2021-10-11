@@ -42,7 +42,7 @@ exports.addNewSale = async (req, res, next) => {
         part.realsalepricePart = sale.amountSale;
         await Part.findByIdAndUpdate({ _id: part._id }, part);
 
-        res.status(200).json({ msg: "Venta realizada con exito" });
+        res.status(200).json(newsale);
       } else {
         res.status(400).json({ msg: "La pieza no exite o ya está vendida" });
       }
@@ -65,7 +65,7 @@ exports.getAllSales = async (req, res, next) => {
       })
       .populate({
         path: "ownerpartSale",
-        select: "namePart pricePart codePart",
+        select: "namePart pricePart codePart realsalepricePart",
       })
       .populate({
         path: "owneruserSale",
