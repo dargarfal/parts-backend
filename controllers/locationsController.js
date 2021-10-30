@@ -83,3 +83,20 @@ exports.deleteLocation = async (req, res) => {
     next();
   }
 };
+
+//api/locations/:id - Get - Get a Location
+exports.getLocation = async (req, res) => {
+
+  const test = await Location.findOne({ _id: req.params.id });
+
+  try {
+    if(test) {
+      res.status(200).json(test);
+    }else {
+      res.status(400).json({ msg: "La Ubicacion solicitada no existe" });  
+    }
+  } catch (error) {
+    res.status(400).json(error);
+    next();
+  }
+}

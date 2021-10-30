@@ -34,4 +34,7 @@ router.put(
 //Delete location
 router.delete("/:id", auth, locationController.deleteLocation);
 
+//Get Location
+router.get("/:id", auth, locationController.getLocation);
+
 module.exports = router;
